@@ -16,6 +16,16 @@ const projectSchema = new mongoose.Schema(
     name: { type: String, required: true, trim: true },
     slug: { type: String, unique: true, index: true },
     description: { type: String, default: '' },
+    category: {
+      type: String,
+      enum: ['photography', 'videography', 'audio'],
+      default: 'photography',
+    },
+    subcategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Subcategory',
+      default: null,
+    },
     coverImage: { type: String, required: true },
     photos: [photoSchema],
     order: { type: Number, default: 0 },

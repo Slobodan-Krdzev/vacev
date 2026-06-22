@@ -1,7 +1,16 @@
 import 'dotenv/config';
+import slugify from 'slugify';
 import { connectDB } from './config/db.js';
 import { User } from './models/User.js';
 import { Project } from './models/Project.js';
+import { Subcategory } from './models/Subcategory.js';
+
+const sampleSubcategories = [
+  { name: 'Portraits', category: 'photography', order: 0 },
+  { name: 'Fashion', category: 'photography', order: 1 },
+  { name: 'Commercial', category: 'videography', order: 0 },
+  { name: 'Brand Films', category: 'videography', order: 1 },
+];
 
 const sampleProjects = [
   {
@@ -9,6 +18,8 @@ const sampleProjects = [
     description:
       'A collection of intimate portrait work exploring light, color, and character. Each session captures the unique essence of the subject through dramatic lighting and bold composition.',
     coverImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80',
+    category: 'photography',
+    subcategorySlug: 'portraits',
     order: 0,
     photos: [
       { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=1200&q=80', alt: 'Portrait 1', order: 0, span: 'wide' },
@@ -24,6 +35,8 @@ const sampleProjects = [
     description:
       'Brand-focused commercial photography and video campaigns. From product launches to lifestyle content, delivering visuals that connect with audiences and elevate brands.',
     coverImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80',
+    category: 'videography',
+    subcategorySlug: 'commercial',
     order: 1,
     photos: [
       { url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80', alt: 'Commercial 1', order: 0, span: 'wide' },
@@ -37,6 +50,8 @@ const sampleProjects = [
     description:
       'Editorial fashion photography blending contemporary style with timeless aesthetics. Collaborations with designers, stylists, and models to create striking visual narratives.',
     coverImage: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=80',
+    category: 'photography',
+    subcategorySlug: 'fashion',
     order: 2,
     photos: [
       { url: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=1200&q=80', alt: 'Fashion 1', order: 0, span: 'wide' },
@@ -63,9 +78,31 @@ async function seed() {
     console.log('Admin user already exists');
   }
 
+  const subcategoryCount = await Subcategory.countDocuments();
+  if (subcategoryCount === 0) {
+    await Subcategory.insertMany(
+      sampleSubcategories.map((item) => ({
+        ...item,
+        slug: slugify(item.name, { lower: true, strict: true }),
+      }))
+    );
+    console.log(`Seeded ${sampleSubcategories.length} subcategories`);
+  } else {
+    console.log('Subcategories already exist, skipping seed');
+  }
+
+  const subcategoryBySlug = Object.fromEntries(
+    (await Subcategory.find()).map((item) => [item.slug, item._id])
+  );
+
   const count = await Project.countDocuments();
   if (count === 0) {
-    await Project.insertMany(sampleProjects);
+    await Project.insertMany(
+      sampleProjects.map(({ subcategorySlug, ...project }) => ({
+        ...project,
+        subcategory: subcategoryBySlug[subcategorySlug] || null,
+      }))
+    );
     console.log(`Seeded ${sampleProjects.length} sample projects`);
   } else {
     console.log('Projects already exist, skipping seed');

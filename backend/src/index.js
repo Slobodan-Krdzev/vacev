@@ -8,6 +8,7 @@ import { connectDB } from './config/db.js';
 import authRoutes from './routes/auth.js';
 import projectRoutes from './routes/projects.js';
 import adminRoutes from './routes/admin.js';
+import subcategoryRoutes from './routes/subcategories.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -23,6 +24,7 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/subcategories', subcategoryRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.get('/api/health', (_req, res) => {
