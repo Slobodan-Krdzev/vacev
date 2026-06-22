@@ -19,18 +19,28 @@ const storage = multer.diskStorage({
   },
 });
 
-const imageFilter = (_req, file, cb) => {
+const mediaFilter = (_req, file, cb) => {
+  if (file.fieldname === 'audioFile') {
+    if (file.mimetype.startsWith('audio/')) {
+      cb(null, true);
+      return;
+    }
+    cb(new Error('Only audio files are allowed'));
+    return;
+  }
+
   if (file.mimetype.startsWith('image/')) {
     cb(null, true);
-  } else {
-    cb(new Error('Only image files are allowed'));
+    return;
   }
+
+  cb(new Error('Only image files are allowed'));
 };
 
 export const upload = multer({
   storage,
-  fileFilter: imageFilter,
-  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter: mediaFilter,
+  limits: { fileSize: 50 * 1024 * 1024 },
 });
 
 export const uploadsDirPath = uploadsDir;
