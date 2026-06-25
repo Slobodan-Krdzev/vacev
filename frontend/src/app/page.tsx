@@ -1,20 +1,11 @@
 import PageLayout from '@/components/PageLayout';
 import HomeProjects from '@/components/HomeProjects';
-import { getProjects, getSubcategories } from '@/lib/api';
-import type { Project, Subcategory } from '@/types';
+import { fetchProjects, fetchSubcategories } from '@/lib/data';
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  let projects: Project[] = [];
-  let subcategories: Subcategory[] = [];
-
-  try {
-    [projects, subcategories] = await Promise.all([getProjects(), getSubcategories()]);
-  } catch {
-    projects = [];
-    subcategories = [];
-  }
+  const [projects, subcategories] = await Promise.all([fetchProjects(), fetchSubcategories()]);
 
   return (
     <PageLayout>

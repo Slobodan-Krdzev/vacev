@@ -1,18 +1,11 @@
 import PageLayout from '@/components/PageLayout';
 import ProjectGrid from '@/components/ProjectGrid';
-import { getProjects } from '@/lib/api';
-import type { Project } from '@/types';
+import { fetchProjects } from '@/lib/data';
 
 export const revalidate = 60;
 
 export default async function PortfolioPage() {
-  let projects: Project[] = [];
-
-  try {
-    projects = await getProjects();
-  } catch {
-    projects = [];
-  }
+  const projects = await fetchProjects();
 
   return (
     <PageLayout>
@@ -21,8 +14,8 @@ export default async function PortfolioPage() {
           Portfolio
         </h1>
         <p className="mt-3 max-w-2xl text-muted">
-          A curated selection of photography and videography work across portraits,
-          commercial, and fashion.
+          A curated selection of photography, videography, and audio work across portraits,
+          commercial, fashion, and studio sessions.
         </p>
       </div>
       {projects.length > 0 ? (

@@ -4,7 +4,7 @@ import PageLayout from '@/components/PageLayout';
 import PhotoMasonry from '@/components/PhotoMasonry';
 import PlatformLinks from '@/components/PlatformLinks';
 import YouTubeEmbed from '@/components/YouTubeEmbed';
-import { getProject } from '@/lib/api';
+import { fetchProject } from '@/lib/data';
 
 export const revalidate = 60;
 
@@ -14,11 +14,9 @@ interface ProjectPageProps {
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
+  const project = await fetchProject(slug);
 
-  let project;
-  try {
-    project = await getProject(slug);
-  } catch {
+  if (!project) {
     notFound();
   }
 
