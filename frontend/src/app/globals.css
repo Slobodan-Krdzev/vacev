@@ -1,0 +1,153 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f7f5f1;
+  --surface: #ffffff;
+  --heading: #2b2b2b;
+  --foreground: #767676;
+  --muted: #767676;
+  --accent: #6e7f73;
+  --accent-hover: #5c6b61;
+  --border: #ddd8d1;
+  --logo: #5c6b61;
+  --project-title: #2b2b2b;
+  --site-header-height: 5.5rem;
+  --site-filters-height: 5rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-heading: var(--heading);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-border: var(--border);
+  --color-logo: var(--logo);
+  --color-project-title: var(--project-title);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-bebas);
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  overscroll-behavior-x: none;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-bebas), Impact, sans-serif;
+  color: var(--heading);
+}
+
+.logo {
+  color: var(--logo);
+}
+
+.project-title {
+  color: var(--project-title);
+}
+
+.apple-pill {
+  border-radius: 9999px;
+}
+
+.apple-round {
+  border-radius: 1.25rem;
+}
+
+@supports (corner-shape: squircle) {
+  .apple-round {
+    border-radius: 1.75rem;
+    corner-shape: squircle;
+  }
+}
+
+.apple-segment-track {
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--border) 55%, var(--surface));
+  padding: 4px;
+}
+
+.apple-segment-indicator {
+  border-radius: 9999px;
+  background: var(--accent);
+  transition:
+    transform 0.42s cubic-bezier(0.32, 0.72, 0, 1),
+    width 0.42s cubic-bezier(0.32, 0.72, 0, 1);
+  will-change: transform, width;
+}
+
+.filter-dropdown {
+  border-radius: 1rem;
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
+  box-shadow:
+    0 4px 24px color-mix(in srgb, var(--heading) 8%, transparent),
+    0 1px 3px color-mix(in srgb, var(--heading) 4%, transparent);
+  padding: 4px;
+}
+
+.filter-dropdown-item {
+  border-radius: 0.75rem;
+  color: var(--heading);
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.filter-dropdown-item:hover {
+  background: color-mix(in srgb, var(--border) 45%, var(--surface));
+  color: var(--heading);
+}
+
+.filter-dropdown-item-active {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.filter-dropdown-item-active:hover {
+  background: var(--accent-hover);
+  color: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .apple-segment-indicator {
+    transition: none;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.7s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
