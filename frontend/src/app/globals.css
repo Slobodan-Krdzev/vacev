@@ -13,6 +13,7 @@
   --project-title: #2b2b2b;
   --site-header-height: 5.5rem;
   --site-filters-height: 5rem;
+  --site-footer-height: 5rem;
 }
 
 @theme inline {
